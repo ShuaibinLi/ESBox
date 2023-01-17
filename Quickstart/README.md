@@ -1,6 +1,6 @@
 
 # QuickStart
-Follow these three steps to optimize your customized problem using different training paradigms.
+ESBox provides two training methods: local and distributed, and you can solve custom problems according to the following guidelines.
 
 ## 1. Local training 
 **Step 1. Define model (Optional)** If you want to optimize model parameters, define your own model network and inherit the model base class (`TorchModel` and `PaddleModel` are currently available). If you want to optimize your float List, skip this step.         
@@ -22,15 +22,15 @@ This example is based on the paddlepaddle deep learning framework and uses the O
 ```bash
 cd CartPole-example
 ```
-```bash
-# start local training
-python run_local.py --config_file ./local.ymal
-```
-```bash
-# start distributed training
-xparl start --port 8010
-python run_distributed.py --config_file ./distributed.ymal
-```
+- start local training
+    ```bash
+    python run_local.py --config_file ./local.ymal
+    ```
+- start distributed training
+    ```bash
+    xparl start --port 8010
+    python run_distributed.py --config_file ./distributed.ymal
+    ```
 **Expected Result** 
 The task can get around 500 points after 200 steps.
 
@@ -40,13 +40,15 @@ This example uses the OpenAI-ES algorithm optimization flost **list** (input to 
 ```bash
 cd Quadratic-example
 ```
-```bash
-python run_local.py --config_file ./local.ymal
-```
-```bash
-xparl start --port 8010
-python run_distributed.py --config_file ./distributed.ymal
-```
+- start local training
+    ```bash
+    python run_local.py --config_file ./local.ymal
+    ```
+- start distributed training
+    ```bash
+    xparl start --port 8010
+    python run_distributed.py --config_file ./distributed.ymal
+    ```
 
 **Expected Result** 
 The task can get around 0.99999 (the actual maximum value is 1) points after 200 steps.

@@ -7,7 +7,7 @@
     # alg config
     'mirror_sample': true
     'sample_num': 500
-    'stepsize': 0.002
+    'learning_rate': 0.002
     'noise_stdev': 0.2
     'init_policy': 'random'
 

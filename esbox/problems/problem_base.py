@@ -10,6 +10,7 @@ class ProblemBase(object):
 
     def evaluate_batch(self, batch_flatten_weights, *args, **kwargs):
         rollout_rewards = []
+        bcs = []
         steps = 0
         if len(batch_flatten_weights.shape) == 2:
             batch_flatten_weights = np.expand_dims(batch_flatten_weights, axis=0)
@@ -17,12 +18,15 @@ class ProblemBase(object):
 
         for mini_batch in batch_flatten_weights:
             batch_rewards = []
+            batch_bcs = []
             for weight in mini_batch:
                 ret = self.evaluate(weight)
                 batch_rewards.append(ret['value'])
+                batch_bcs.append(ret['info'].get('bc', weight))
                 steps += ret['info'].get('step', 1)
             rollout_rewards.append(batch_rewards)
-        return {'values': rollout_rewards, 'info': {"steps": steps}}
+            bcs.append(batch_bcs)
+        return {'values': rollout_rewards, 'info': {"steps": steps, 'bcs': bcs}}
 
     def get_dim(self):
         if hasattr(self, 'model'):

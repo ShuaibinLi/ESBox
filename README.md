@@ -1,5 +1,7 @@
 
-ESBox is an efficient tool for black-box optimization with multiple evolutionary strategy algorithms.
+English | [简体中文](./README_cn.md)
+
+> ESBox is an efficient tool for black-box optimization with multiple evolutionary strategy algorithms.
 
 
 ## ESBox Capabilities in a Glance
@@ -67,13 +69,13 @@ ESBox is an efficient tool for black-box optimization with multiple evolutionary
         </ul>
       </td>
       <td align="left" >
-        <li><a href="http://gitlab.baidu.com/nlp-ol/ESBox/tree/developing/examples/tuned_configs">Config</a></li>
+        <li><a href="examples/tuned_configs/">Config</a></li>
         <li><b>Objects</b></li>
             <ul>
             <li>Model (torch, paddlepaddle)</li>
             <li>List (float)</li>
             </ul>
-        <li><b><a href="http://gitlab.baidu.com/nlp-ol/ESBox/tree/developing/examples">Examples</a></b></li>
+        <li><b><a href="examples/">Examples</a></b></li>
             <ul>
             <li>Local training</li>
               <ul> 
@@ -84,7 +86,7 @@ ESBox is an efficient tool for black-box optimization with multiple evolutionary
               <li>RL problem: HalfCheetah-v2 (Model) </li>
               </ul>
             </ul>
-          <li><b><a href="http://gitlab.baidu.com/nlp-ol/ESBox/tree/developing/Quickstart-demos">QuickStart</a></b></li>
+          <li><b><a href="Quickstart/">QuickStart</a></b></li>
             <ul>
             <li>RL problem: Cartpole-v1 (optimization Model) </li>
               <ul> 
@@ -121,10 +123,10 @@ Note: To use mujoco-v2 env in gym0.18.0, please download the [mujoco210](https:/
 
 
 ### Start training
-#### [QuickStart](http://gitlab.baidu.com/nlp-ol/ESBox/tree/developing/Quickstart)
+#### [QuickStart](Quickstart/)
 + Two training methods: local training and distributed training
 + Two forms of optimization: Model optimization (CartPole-v1 as an example) and float List optimization (2-dimensional 2nd degree function as an example)
 
-#### [Examples](http://gitlab.baidu.com/nlp-ol/ESBox/tree/developing/examples).
+#### [Examples](examples/).
 + Examples of five algorithms that solve two categories of problems
 + The results of the benchmark reproduction

@@ -1,6 +1,6 @@
 
 # 快速开始
-按照以下三个步骤使用不同的训练范式优化自定义的问题。
+ESBox提供两种训练方式：本地、分布式，可以根据以下指引来解决自定义问题。
 
 ## 1. 本地训练
 **第一步：定义模型（可选）** 如果希望优化模型参数，请定义自己的模型网络，并继承模型基类（目前提供了`TorchModel`和`PaddleModel`），如果希望优化浮点型 List，请跳过这步。    
@@ -21,15 +21,15 @@
 ```bash
 cd CartPole-example
 ```
-```bash
-# 启动本地训练
-python run_local.py --config_file ./local.ymal
-```
-```bash
-# 启动分布式训练
-xparl start --port 8010
-python run_distributed.py --config_file ./distributed.ymal
-```
+- 启动本地训练
+    ```bash
+    python run_local.py --config_file ./local.ymal
+    ```
+- 启动分布式训练
+    ```bash
+    xparl start --port 8010
+    python run_distributed.py --config_file ./distributed.ymal
+    ```
 **预期结果** 
 200 轮优化迭代后，该任务可在环境中获取 500 分左右的奖励。
 
@@ -39,12 +39,14 @@ python run_distributed.py --config_file ./distributed.ymal
 ```bash
 cd Quadratic-example
 ```
-```bash
-python run_local.py --config_file ./local.ymal
-```
-```bash
-xparl start --port 8010
-python run_distributed.py --config_file ./distributed.ymal
-```
+- 启动本地训练
+    ```bash
+    python run_local.py --config_file ./local.ymal
+    ```
+- 启动分布式训练
+    ```bash
+    xparl start --port 8010
+    python run_distributed.py --config_file ./distributed.ymal
+    ```
 **预期结果** 
 200 轮优化迭代后，该任务可找到函数最大值 0.99999（实际最大值1）。

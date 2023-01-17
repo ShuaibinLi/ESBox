@@ -1,4 +1,7 @@
-ESBox是一个高效的黑盒优化工具，具有多种进化策略算法。
+
+[English](./README.md) | 简体中文
+
+> ESBox是一个高效的黑盒优化工具，具有多种进化策略算法。
 
 
 ## ESBox 功能一览
@@ -66,13 +69,13 @@ ESBox是一个高效的黑盒优化工具，具有多种进化策略算法。
         </ul>
       </td>
       <td align="left" >
-        <li><a href="http://gitlab.baidu.com/nlp-ol/ESBox/tree/developing/examples/tuned_configs">配置文件</a></li>
+        <li><a href="examples/tuned_configs/">配置文件</a></li>
         <li><b>优化目标</b></li>
             <ul>
             <li>Model（torch，paddlepaddle）</li>
             <li>List（浮点型）</li>
             </ul>
-        <li><b><a href="http://gitlab.baidu.com/nlp-ol/ESBox/tree/developing/examples">例子</a></b></li>
+        <li><b><a href="examples/">例子</a></b></li>
             <ul>
             <li>本地训练</li>
               <ul> 
@@ -83,7 +86,7 @@ ESBox是一个高效的黑盒优化工具，具有多种进化策略算法。
               <li>强化学习问题 HalfCheetah-v2（Model）</li>
               </ul>
             </ul>
-          <li><b><a href="http://gitlab.baidu.com/nlp-ol/ESBox/tree/developing/Quickstart">使用样例</a></b></li>
+          <li><b><a href="Quickstart/">使用样例</a></b></li>
             <ul>
             <li>强化学习问题：Cartpole（优化 Model）</li>
               <ul> 
@@ -120,10 +123,10 @@ pip install .
 
 
 ### 使用教程
-#### [快速开始](http://gitlab.baidu.com/nlp-ol/ESBox/tree/developing/Quickstart)
+#### [快速开始](Quickstart/)
 + 两种训练方式：本地训练、分布式训练
 + 两种优化形式：模型优化（以 CartPole-v1 为例）、浮点型 List 优化（以2维2次函数为例）
 
-#### [Examples](http://gitlab.baidu.com/nlp-ol/ESBox/tree/developing/examples)
+#### [Examples](examples/)
 + 提供五种算法解决两大类问题的示例
 + 展示 benchmark 复现结果

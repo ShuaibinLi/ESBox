@@ -1,4 +1,4 @@
-"ars":
+"nsraes":
     'func_name': 'ackley'   # 'griewank'
     'seed': 120
     'dim': 2    # 10, 20, 100
@@ -6,8 +6,10 @@
 
     # alg config
     'mirror_sample': true
-    'sample_num': 20
-    'learning_rate': 0.06
+    'meta_population_size': 3
+    'top_k': 16
+    'sample_num': 500
+    'learning_rate': 0.002
     'noise_stdev': 0.2
     'init_policy': 'random'
 

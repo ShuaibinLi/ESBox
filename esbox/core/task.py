@@ -36,7 +36,7 @@ class Task(object):
             self.eval_episodes = 1
 
         ### parameters for sampler
-        self.mirror = self.config.hyparams.get('mirror_sample', True)
+        self.mirror = self.config.hyparams.get('mirror_sample', None)
         self.seed = self.config.hyparams.get('seed', None)
         # gaussian
         self.noise_stdev = self.config.hyparams.get('noise_stdev', None)
@@ -97,11 +97,12 @@ class Task(object):
                 sigma=self.noise_stdev,
                 init_weights=self.init_weights)
             print("Collecting init archives for narses ...")
-            rewards, eval_info = self.evaluate()
-            max_idx = np.argsort(rewards)[::-1][:self.meta_population_size]
-            for idx in max_idx:
-                self.learner._archives.append(eval_info['bcs'][idx])
-                self.learner.latest_r = np.mean(rewards)
+            while len(self.learner._archives) < self.meta_population_size:
+                rewards, eval_info = self.evaluate()
+                max_idx = np.argsort(rewards)[::-1][:self.meta_population_size]
+                for idx in max_idx:
+                    self.learner._archives.append(eval_info['bcs'][idx])
+                    self.learner.latest_r = np.mean(rewards)
         elif self.alg_name == 'cmaes':
             self.sampler = CMASampler(
                 weights_size=self.param_num, bounds=self.bounds, seed=self.seed, sigma=self.init_sigma)
@@ -158,7 +159,12 @@ class Task(object):
             sampled_info (dict): different samplers return different dict, all of which contain 'batch_flatten_weights' key.
         """
         self.latest_weights = self.learner.weights
-
+        if self.alg_name == 'nsraes':
+            rewards, eval_info = self.evaluate()
+            max_idx = np.argsort(rewards)[::-1]
+            self.learner._archives.append(eval_info['bcs'][max_idx[0]])
+            self.learner.latest_r = np.mean(rewards)
+    
         # sample n batch weights
         sample_batch = self.sample_num // 2 if self.mirror else self.sample_num
         sampled_info = self.sampler(self.latest_weights, sample_batch, self.learned_info)
@@ -166,8 +172,9 @@ class Task(object):
         batch_flatten_weights = sampled_info['batch_flatten_weights']
 
         # evaluates sampled weights
-        sampled_values = self.eval_func.evaluate_batch(batch_flatten_weights)
-        noise_rewards = np.array(sampled_values['values'])
+        sampled_results = self.eval_func.evaluate_batch(batch_flatten_weights)
+        noise_rewards = np.array(sampled_results['values'])
+        sampled_info['bcs'] = sampled_results['info'].get('bcs', None)
         return noise_rewards, sampled_info
 
     def evaluate(self):
@@ -175,15 +182,20 @@ class Task(object):
 
         Returns:
             rewards (list): len == num_workers, rewards collected during the evaluation
-            eval_info (dict): None TODO
+            eval_info (dict): additional information during the evaluation, e.g. steps, bcs(for nsraes alg)
         """
+        weights = self.learner.weights
         eval_values = []
-        # print(self.latest_weights)
+        bcs = []
+        steps = []
         for _ in range(self.eval_episodes):
-            info = self.eval_func.evaluate(self.latest_weights)
-            value = info['value']
-            eval_values.append(value)
-        return eval_values, {}
+            result = self.eval_func.evaluate(weights)
+            eval_values.append(result['value'])
+            bcs.append(result['info'].get('bc', weights))
+            steps.append(result['info'].get('step', 1))
+        eval_values = np.array(eval_values).squeeze(-1)
+        eval_info = {"steps": np.array(steps), 'bcs': bcs}
+        return eval_values, eval_info
 
     def run(self):
         """Trains and evaluate the model.
