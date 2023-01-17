@@ -1,0 +1,5 @@
+esbox
+parl
+torch
+gym==0.18.0
+mujoco-py==2.1.2.14

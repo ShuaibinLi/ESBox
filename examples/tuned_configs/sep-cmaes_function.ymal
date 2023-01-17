@@ -1,0 +1,15 @@
+"sep-cmaes":
+    'func_name': 'ackley'   # 'griewank'
+    'seed': 120
+    'dim': 2    # 10, 20, 100
+    'bounds': [-32, 32]     # [-600, 600]
+
+    # alg config
+    'sample_num': 50
+    'init_sigma': 0.1
+    'init_policy': 'random'
+
+    # train settings
+    'max_runs': 1000
+    'display': true
+    'eval_every_run': 10

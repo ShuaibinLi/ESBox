@@ -1,0 +1,17 @@
+"sep-cmaes":
+    # function name: ackley, griewank, zakharov, rastrigin, rosenbrock, styblinskitang
+    'func_name': 'styblinskitang'
+    'seed': 120
+    'dim': 11
+    'scale': true
+    # 'bounds': [-5, 5] # use model with tanh, scale=True [-1, 1]
+
+    # alg config
+    'sample_num': 100
+    'init_sigma': 0.1
+    'mu': 50
+
+    # train settings
+    'max_runs': 200
+    'display': true
+    'eval_every_run': 10

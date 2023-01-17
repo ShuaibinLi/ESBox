@@ -1,0 +1,18 @@
+"openaies":
+    # env config
+    'env_name': 'HalfCheetah-v2'
+    'seed': 120
+
+    # alg config
+    'mirror_sample': true
+    'sample_num': 500
+    'learning_rate': 0.02
+    'noise_stdev': 0.03
+    'init_policy': 'zeros'
+
+    # train settings
+    'max_runs': 1000
+    'num_workers': 50
+    'xparl_addr': 'localhost:8010'
+    'display': true
+    'eval_every_run': 10

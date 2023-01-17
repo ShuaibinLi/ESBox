@@ -1,0 +1,18 @@
+"ars":
+    # function name: ackley, griewank, zakharov, rastrigin, rosenbrock, styblinskitang
+    'func_name': 'styblinskitang'
+    'seed': 120
+    'dim': 11
+    'scale': true
+
+    # alg config
+    'mirror_sample': true
+    'sample_num': 100
+    'top_k': 16
+    'learning_rate': 0.02
+    'noise_stdev': 0.03
+
+    # train settings
+    'max_runs': 200
+    'display': true
+    'eval_every_run': 10

@@ -1,0 +1,21 @@
+"nsraes":
+    # env config
+    'env_name': 'HalfCheetah-v2'
+    'n': 16
+    'seed': 120
+
+    # alg config
+    'mirror_sample': true
+    'meta_population_size': 3
+    'top_k': 16
+    'sample_num': 500
+    'learning_rate': 0.01
+    'noise_stdev': 0.02
+    'init_policy': 'zeros'
+
+    # train settings
+    'max_runs': 1000
+    'num_workers': 50
+    'xparl_addr': 'localhost:8010'
+    'display': true
+    'eval_every_run': 10

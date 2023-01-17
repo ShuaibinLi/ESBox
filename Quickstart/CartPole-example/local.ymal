@@ -1,0 +1,12 @@
+"openaies":
+    # alg config
+    'mirror_sample': true
+    'sample_num': 8
+    'learning_rate': 0.01
+    'noise_stdev': 0.02
+    'init_policy': 'zeros'
+
+    # train settings
+    'max_runs': 200
+    'display': true
+    'eval_every_run': 10

@@ -1,0 +1,16 @@
+"sep-cmaes":
+    # env config
+    'env_name': 'HalfCheetah-v2'
+    'seed': 120
+
+    # alg config
+    'sample_num': 500
+    'init_sigma': 0.1
+    'init_policy': 'zeros'
+
+    # train settings
+    'max_runs': 1000
+    'num_workers': 50
+    'xparl_addr': 'localhost:8010'
+    'display': true
+    'eval_every_run': 10

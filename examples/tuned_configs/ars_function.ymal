@@ -1,0 +1,17 @@
+"ars":
+    'func_name': 'ackley'   # 'griewank'
+    'seed': 120
+    'dim': 2    # 10, 20, 100
+    'bounds': [-32, 32]     # [-600, 600]
+
+    # alg config
+    'mirror_sample': true
+    'sample_num': 20
+    'stepsize': 0.06
+    'noise_stdev': 0.2
+    'init_policy': 'random'
+
+    # train settings
+    'max_runs': 1000
+    'display': true
+    'eval_every_run': 10

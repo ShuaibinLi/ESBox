@@ -1,0 +1,17 @@
+"openaies":
+    'func_name': 'ackley'   # 'griewank'
+    'seed': 120
+    'dim': 2    # 10, 20, 100, 500
+    'bounds': [-32, 32]     # [-600, 600]
+
+    # alg config
+    'mirror_sample': true
+    'sample_num': 500
+    'stepsize': 0.002
+    'noise_stdev': 0.2
+    'init_policy': 'random'
+
+    # train settings
+    'max_runs': 1000
+    'display': true
+    'eval_every_run': 10
