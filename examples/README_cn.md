@@ -4,18 +4,18 @@
 ### 实验结果
 + 四个算法在两个数学函数（Ackley 和 Griewank）的五个维度（2，10，20，100，500）上的实验结果。（直接优化浮点型列表，即数学函数的输入）
 <p align="center">
-<img src="/.results/ackley_results.png" alt="ackley_results">
+<img src=".results/ackley_results.png" alt="ackley_results">
 </p>
 <p align="center">
-<img src="/.results/griewank_results.png" alt="griewank_results">
+<img src=".results/griewank_results.png" alt="griewank_results">
 </p>       
 提示：1. NSRA-ES 在该问题下意义欠缺，因此不做对比实验。
 2. 在 dim=500 时，问题难度升级，我们加大了 sample_num 以达到收敛效果（ARS的 sample_num=200，CMAES和Sep-CMAES的 sample_num=500）。
 
 + 五个算法在两个强化学习环境（HalfCheetah-v2 和 Humanoid-v2）中的实验结果。（优化用模型网络）
 <center class="half">
-    <img src="/.results/HalfCheetah-v2.png" alt="HalfCheetah-v2"/>
-    <img src="/.results/Humanoid-v2.png" alt="Humanoid-v2"/>
+    <img src=".results/HalfCheetah-v2.png" alt="HalfCheetah-v2"/>
+    <img src=".results/Humanoid-v2.png" alt="Humanoid-v2"/>
 </center>   
 提示：在 Humanoid-v2 环境中有两个算法不做对比实验，因观察空间和动作空间维度较大，NSRAES算法难以计算bc，CMAES采样算法开销太大（采样一次需要1-2分钟）。
 
