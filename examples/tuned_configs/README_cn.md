@@ -16,7 +16,7 @@
 + **`top_k (int, optinal, default=None)`**: 表现最优的前k个评估点（ARS、CMAES、Sep-CMAES），计算新颖性时使用的最近邻数（NSRA-ES）
 + **`init_sigma (float, optinal, default=1.0)`**: 协方差矩阵初始值（CMAES、Sep-CMAES）
 + **`alg_name (string, )`**: 算法名称（可选项： 'openaies', 'ars', 'nsraes', 'cmaes', 'sep-cmaes'）
-**提示**：不同学习器的具体参数说明可查看[algorithms](http://gitlab.baidu.com/nlp-ol/ESBox/tree/developing/esbox/algorithms)中相对应的注释。
+**提示**：不同学习器的具体参数说明可查看[algorithms](../../esbox/algorithms/)中相对应的注释。
 
 ## 任务配置
 + **`max_runs (int, optinal, default=200)`**: 最大迭代优化次数

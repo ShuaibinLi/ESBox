@@ -23,7 +23,7 @@
 
 
 ## 如何使用
-首先进入[examples](http://gitlab.baidu.com/nlp-ol/ESBox/tree/developing/examples)文件夹，根据以下指引复现上述实验结果   
+首先进入[examples](../examples)文件夹，根据以下指引复现上述实验结果   
 ```bash
 cd examples
 ```
@@ -50,4 +50,4 @@ xparl start --port 8010 --cpu_num 50
 # 启动训练
 python run_mujoco.py --config_file ./tuned_configs/openaies_mujoco.ymal
 ```
-其余的算法和问题对应的 config 详见 [tuned_config](http://gitlab.baidu.com/nlp-ol/ESBox/tree/developing/examples/tuned_configs)。
+其余的算法和问题对应的 config 详见 [tuned_config](./tuned_configs)。
