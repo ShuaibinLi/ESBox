@@ -2,14 +2,14 @@ import os
 import argparse
 import parl
 from parl.utils import logger
-import paddle.nn as nn
+import torch.nn as nn
 
-from esbox.models import PaddleModel
+from esbox.models import TorchModel
 from esbox.core import Config, ParallelTask
 from esbox.problems.gym_problems import RLProblem
 
 
-class MyModel(PaddleModel):
+class MyModel(TorchModel):
     def __init__(self, obs_dim, act_dim):
         super(MyModel, self).__init__()
 
