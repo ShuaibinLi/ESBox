@@ -110,7 +110,7 @@ English | [简体中文](./README_cn.md)
 
 ### Install
 ```
-git clone ssh://g@gitlab.baidu.com:8022/nlp-ol/ESBox.git
+git clone https://github.com/ShuaibinLi/ESBox.git
 cd ESBox
 pip install . 
 ```
@@ -127,6 +127,6 @@ Note: To use mujoco-v2 env in gym0.18.0, please download the [mujoco210](https:/
 + Two training methods: local training and distributed training
 + Two forms of optimization: Model optimization (CartPole-v1 as an example) and float List optimization (2-dimensional 2nd degree function as an example)
 
-#### [Examples](examples/).
+#### [Examples](examples/)
 + Examples of five algorithms that solve two categories of problems
 + The results of the benchmark reproduction

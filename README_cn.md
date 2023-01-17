@@ -110,7 +110,7 @@
 
 ### 安装
 ```
-git clone ssh://g@gitlab.baidu.com:8022/nlp-ol/ESBox.git
+git clone https://github.com/ShuaibinLi/ESBox.git
 cd ESBox
 pip install . 
 ```
