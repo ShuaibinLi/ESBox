@@ -11,7 +11,7 @@ Examples and results of five algorithms on the two built-in problems.
     <img src=".results/griewank_results.png" alt="griewank_results">
     </p>       
 
-    Note: 1. NSRA-ES is of little significance in this question, so no comparative experiments are conducted. 2. At dim=500, the difficulty of the problem increases, and we increase the sample_num to achieve the convergence effect (sample_num=200 for ARS, sample_num=500 for CMAES and Sep-CMAES).  
+    Note: At dim=500, the difficulty of the problem increases, and we increase the sample_num to achieve the convergence effect (sample_num=200 for ARS, sample_num=500 for CMAES and Sep-CMAES).  
 
 + Results of five algorithms in two reinforcement learning environments (HalfCheetah-v2 and Humanoid-v2). (model network for optimization)
 

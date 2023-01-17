@@ -11,7 +11,7 @@
     <img src=".results/griewank_results.png" alt="griewank_results">
     </p>       
 
-    提示：1. NSRA-ES 在该问题下意义欠缺，因此不做对比实验。 2. 在 dim=500 时，问题难度升级，我们加大了 sample_num 以达到收敛效果（ARS的 sample_num=200，CMAES和Sep-CMAES的 sample_num=500）。  
+    提示：在 dim=500 时，问题难度升级，我们加大了 sample_num 以达到收敛效果（ARS的 sample_num=200，CMAES和Sep-CMAES的 sample_num=500）。  
  
 + 五个算法在两个强化学习环境（HalfCheetah-v2 和 Humanoid-v2）中的实验结果。（直接优化策略模型）
 
