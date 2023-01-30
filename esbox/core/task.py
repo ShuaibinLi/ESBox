@@ -164,7 +164,7 @@ class Task(object):
             max_idx = np.argsort(rewards)[::-1]
             self.learner._archives.append(eval_info['bcs'][max_idx[0]])
             self.learner.latest_r = np.mean(rewards)
-    
+
         # sample n batch weights
         sample_batch = self.sample_num // 2 if self.mirror else self.sample_num
         sampled_info = self.sampler(self.latest_weights, sample_batch, self.learned_info)
