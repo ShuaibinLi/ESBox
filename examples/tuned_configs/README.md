@@ -36,5 +36,5 @@ The detailed configuration of each part is described below.
     + **`scale` (bool, optional, default=False)**: whether to implement linear scaling from bounds to [x_low, x_up], default [-1, 1]. Usually set when optimizing Model that use tanh as the activation function of last layer.
 
 + ### gym problems
-    + **`env_name (string)`**: name of gym environment, e.g. HalfCheetah-v2
+    + **`env_name (string)`**: name of gym environment, e.g. HalfCheetah-v5
     + **`seed (int, optinal)`**: seed for env (with the seed of the sampler, a config file only needs to appear once)

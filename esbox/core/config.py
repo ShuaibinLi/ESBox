@@ -1,6 +1,7 @@
 import os
 import yaml
-from parl.utils import logger
+from loguru import logger
+
 from esbox.utils import _HAS_PADDLE, _HAS_TORCH
 
 __all__ = ['Config']

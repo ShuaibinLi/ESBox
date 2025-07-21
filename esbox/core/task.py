@@ -1,7 +1,9 @@
+import os
 import time
 import numpy as np
-import parl
-from parl.utils import logger, tensorboard
+from loguru import logger
+from tensorboardX import SummaryWriter
+
 from esbox.sampler import *
 from esbox.algorithms import *
 
@@ -22,6 +24,7 @@ class Task(object):
         self.max_runs = self.config.hyparams.get('max_runs', 1000)
         self.eval_every_run = self.config.hyparams.get('eval_every_run', 10)
         self.display = self.config.hyparams.get('display', True)
+        self.work_dir = self.config.hyparams.get('work_dir')
 
         ### parameters for problem
         self.func_name = self.config.hyparams.get('func_name', None)
@@ -75,6 +78,7 @@ class Task(object):
         self.init_weights = self._init_weights(init_policy)
 
         # print configs and init_weights
+        logger.add(os.path.join(self.work_dir, 'task_run.log'))
         logger.info("Running task with config: \n{}, \nInit weights are: \n{}".format(
             (self.config.alg_name, self.config.hyparams), self.init_weights))
 
@@ -200,6 +204,7 @@ class Task(object):
     def run(self):
         """Trains and evaluate the model.
         """
+        self.writer = SummaryWriter(log_dir=os.path.join(self.work_dir, "tb_res"))
         for i in range(self.max_runs):
             # Perform one update step of the policy weights.
             rollout_rewards, sampled_info = self.run_evals()
@@ -207,11 +212,11 @@ class Task(object):
             if self.display:
                 logger.info("Training step: {}, avg reward: {}, max reward: {}".format(
                     i + 1, np.mean(rollout_rewards), np.max(rollout_rewards)))
-            tensorboard.add_scalar('train/avg_reward', np.mean(rollout_rewards), i + 1)
-            tensorboard.add_scalar('train/std_reward', np.std(rollout_rewards), i + 1)
-            tensorboard.add_scalar('train/max_reward', np.max(rollout_rewards), i + 1)
-            tensorboard.add_scalar('train/min_reward', np.min(rollout_rewards), i + 1)
-            tensorboard.add_scalar('train/total_steps', self.timesteps, i + 1)
+            self.writer.add_scalar('train/avg_reward', np.mean(rollout_rewards), i + 1)
+            self.writer.add_scalar('train/std_reward', np.std(rollout_rewards), i + 1)
+            self.writer.add_scalar('train/max_reward', np.max(rollout_rewards), i + 1)
+            self.writer.add_scalar('train/min_reward', np.min(rollout_rewards), i + 1)
+            self.writer.add_scalar('train/total_steps', self.timesteps, i + 1)
 
             # record statistics every `eval_every_run` iterations
             if (i == 0 or (i + 1) % self.eval_every_run == 0):
@@ -219,12 +224,13 @@ class Task(object):
 
                 if self.eval_episodes == 1:
                     logger.info("Steps: {}, eval_reward: {}".format(i + 1, np.mean(rewards)))
-                    tensorboard.add_scalar('eval/reward', np.mean(rewards), i + 1)
-                    tensorboard.add_scalar('eval/std_reward', np.std(rewards), i + 1)
+                    # self.writer.add_scalar('eval/reward', np.mean(rewards), i + 1)
+                    # self.writer.add_scalar('eval/std_reward', np.std(rewards), i + 1)
                 else:
                     logger.info("Steps: {}, Avg_eval_reward: {}, Max_eval_reward: {}".format(
                         i + 1, np.mean(rewards), np.max(rewards)))
-                    tensorboard.add_scalar('eval/avg_reward', np.mean(rewards), i + 1)
-                    tensorboard.add_scalar('eval/std_reward', np.std(rewards), i + 1)
-                    tensorboard.add_scalar('eval/max_reward', np.max(rewards), i + 1)
-                    tensorboard.add_scalar('eval/min_reward', np.min(rewards), i + 1)
+                    self.writer.add_scalar('eval/avg_reward', np.mean(rewards), i + 1)
+                    self.writer.add_scalar('eval/std_reward', np.std(rewards), i + 1)
+                    self.writer.add_scalar('eval/max_reward', np.max(rewards), i + 1)
+                    self.writer.add_scalar('eval/min_reward', np.min(rewards), i + 1)
+        self.writer.close()

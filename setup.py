@@ -1,4 +1,4 @@
-#   Copyright (c) 2022 PaddlePaddle Authors. All Rights Reserved.
+#   Copyright (c) 2025 PaddlePaddle Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -63,23 +63,22 @@ setup(
     description='Evolutionary Strategy Tools Box',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='http://gitlab.baidu.com/nlp-ol/ESBox',
+    url='https://github.com/ShuaibinLi/ESBox',
     packages=_find_packages(),
     include_package_data=True,
     package_data={'': ['*.so']},
     install_requires=[
         'pyyaml',
-        'parl',
     ],
     classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
     ],
     entry_points={"console_scripts": ["esbox=esbox.example:main"]},
 )

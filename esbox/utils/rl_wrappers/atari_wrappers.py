@@ -7,7 +7,6 @@ import numpy as np
 from collections import deque
 import gym
 from gym import spaces
-from esbox.utils.rl_wrappers.compat_wrappers import CompatWrapper, is_gym_version_ge, V_NPRANDOM_CHANGED
 import cv2
 
 cv2.ocl.setUseOpenCL(False)
@@ -99,10 +98,9 @@ class NoopResetEnv(gym.Wrapper):
         if self.override_num_noops is not None:
             noops = self.override_num_noops
         else:
-            if is_gym_version_ge(V_NPRANDOM_CHANGED):
-                noops = self.unwrapped.np_random.integers(1, self.noop_max + 1)
-            else:
-                noops = self.unwrapped.np_random.randint(1, self.noop_max + 1)
+            noops = self.unwrapped.np_random.integers(1, self.noop_max + 1)
+            # else:
+            #     noops = self.unwrapped.np_random.randint(1, self.noop_max + 1)
         assert noops > 0
         obs = None
         for _ in range(noops):
@@ -334,7 +332,6 @@ def wrap_deepmind(env, dim=84, framestack=True, obs_format='NHWC', test=False, t
         test (bool): whether this is a test env
         test_episodes (int): when test, number of episodes for each evaluation
     """
-    env = CompatWrapper(env)
     env = MonitorEnv(env)
     env = NoopResetEnv(env, noop_max=30)
     if 'NoFrameskip' in env.spec.id:

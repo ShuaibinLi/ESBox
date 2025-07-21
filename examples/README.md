@@ -40,12 +40,12 @@ Two Methods are provided for function problems. (e.g. solve 2D ackley function b
     ```
 
 ### RL problems (distributed training)
-In RL environments, we provide examples which will directly optimize policy model (e.g. solve the HalfCheetah-v2 by OpenAI-ES).  
-Before starting training, please use [xparl](https://parl.readthedocs.io/en/latest/parallel_training/setup.html) to create a cluster. Refer to the [documentation](https://parl.readthedocs.io/en/latest/parallel_training/setup.html) for more information on clustering..
+In RL environments, we provide examples which will directly optimize policy model (e.g. solve the HalfCheetah-v5 by OpenAI-ES).  
+Before starting training, please use [ray](https://docs.ray.io/en/latest/ray-core/starting-ray.html#starting-ray-via-the-cli-ray-start) to create a cluster.
 
 ```bash
 # create a cluster
-xparl start --port 8010 --cpu_num 50
+ray start --head --num-cpus 50 --port 6379
 
 # start training
 python run_mujoco.py --config_file ./tuned_configs/openaies_mujoco.ymal

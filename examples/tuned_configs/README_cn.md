@@ -35,5 +35,5 @@
     + **`scale` (bool, optional, default=False)**: 是否使用防缩映射将数学函数的输入映射到上下界范围内（通常用在最后使用 tanh 激活函数的模型网络解决数学函数问题中）
 
 + ### 强化学习环境
-    + **`env_name (string)`**: 环境名称，比如 HalfCheetah-v2
+    + **`env_name (string)`**: 环境名称，比如 HalfCheetah-v5
     + **`seed (int, optinal)`**: 环境种子（同采样器的种子，一个配置文件仅需要出现一次即可）

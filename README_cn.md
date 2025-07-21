@@ -34,8 +34,8 @@
         <li><b>强化学习环境 gym</b></li>
           <ul>
            <li><a href="https://mujoco.org/">Mujoco</a></li>
-                <ul><li>HalfCheetah-v2</li></ul>
-                <ul><li>Humanoid-v2</li></ul>
+                <ul><li>HalfCheetah-v5</li></ul>
+                <ul><li>Humanoid-v5</li></ul>
           </ul>
       </ul>
       </td>
@@ -83,7 +83,7 @@
               </ul>
             <li>分布式训练</li>
               <ul> 
-              <li>强化学习问题 HalfCheetah-v2（Model）</li>
+              <li>强化学习问题 HalfCheetah-v5（Model）</li>
               </ul>
             </ul>
           <li><b><a href="Quickstart/">使用样例</a></b></li>
@@ -117,9 +117,8 @@ pip install .
 ### 其他依赖
 + [parl](https://github.com/PaddlePaddle/PARL)
 + pytorch or paddlepaddle
-+ gym==0.18.0
-+ mujoco-py==2.1.2.14   
-注意：使用gym0.18.0下的mujoco-v2环境，需要下载[mujoco210（linux版本）](https://mujoco.org/download/mujoco210-linux-x86_64.tar.gz)二进制包，然后解压到目录`~/.mujoco/mujoco210`。
++ [gymnasium](https://github.com/Farama-Foundation/Gymnasium)
+注意：使用 mujoco或atari 环境，使用`pip install "gymnasium[all]"`安装 gymnasium.
 
 
 ### 使用教程

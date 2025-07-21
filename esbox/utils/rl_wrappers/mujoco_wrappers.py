@@ -5,7 +5,6 @@
 import numpy as np
 import gym
 import time
-from esbox.utils.rl_wrappers.compat_wrappers import CompatWrapper
 
 __all__ = ['wrap_rms']
 
@@ -157,7 +156,6 @@ def wrap_rms(env, test=False, ob_rms=None):
         test (bool): True if test else False
         ob_rms (None or np.array): ob_rms from training environment, not None only when test is True
     """
-    # env = CompatWrapper(env)
     env = TimeLimitMaskEnv(env)
     env = MonitorEnv(env)
     if test:
