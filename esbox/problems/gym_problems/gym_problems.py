@@ -21,6 +21,7 @@ class RLProblem(object):
             self.env = wrap_mujoco(env, norm_obs=True)
             self.test_env = wrap_mujoco(env, norm_obs=True)
             self.continuous = True
+            self.obs_rms = None
         elif env_name in ATARI_PROBLEM:
             env = gym.make(env_name)
             self.env = wrap_atari(env, reward_func=np.sign, noop_max=30, frame_skip=4, screen_size=84, stack_size=4)
@@ -33,8 +34,8 @@ class RLProblem(object):
             self.continuous = False
         else:
             try:
-                self.env = gym.make(env_name)
-                self.test_env = gym.make(env_name)
+                self.env = RecordEpisodeStatistics(gym.make(env_name))
+                self.test_env = RecordEpisodeStatistics(gym.make(env_name))
             except:
                 raise Exception("Environment {} not found in gym.".format(env_name))
 
@@ -88,8 +89,9 @@ class RLProblem(object):
 
         self.model.set_flat_weights(weight)
         model = deepcopy(self.model)
-        if self.continuous:
+        if self.continuous and self.obs_rms:
             self.test_env.obs_rms = self.obs_rms
+        steps = 0
         obs, info = self.test_env.reset()
         while True:
             if _HAS_TORCH:
@@ -109,6 +111,7 @@ class RLProblem(object):
                 last_actions.append(action)
                 if steps < self.n:
                     start_actions.append(action)
+            steps += 1
             if terminated or truncated:
                 break
         if self.n is not None:
@@ -130,6 +133,7 @@ class RLProblem(object):
         model = deepcopy(self.model)
 
         total_reward = 0.
+        steps = 0
         obs, info = self.env.reset()
         while True:
             if _HAS_TORCH:
@@ -155,6 +159,7 @@ class RLProblem(object):
                 if steps < self.n:
                     start_actions.append(action)
             total_reward += (reward - self.reward_shift)
+            steps += 1
             if terminated or truncated:
                 if self.continuous:
                     self.obs_rms = self.env.obs_rms
