@@ -5,6 +5,7 @@ __all__ = ['ProblemBase']
 
 
 class ProblemBase(object):
+
     def __init__(self, *args, **kwargs):
         pass
 

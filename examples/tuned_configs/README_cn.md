@@ -22,8 +22,8 @@
 + **`max_runs (int, optinal, default=200)`**: 最大迭代优化次数
 + **`display (bool, optinal, default=True)`**: 是否打印训练过程中的评估信息
 + **`eval_every_run (int, optinal, default=10)`**: 评估训练的间隔轮次
-+ **`xparl_addr (string, optinal, default=None)`**: 分布式训练的 xparl 地址，比如：localhost:8010（仅分布式训练方式需要）
-+ **`num_workers (int, optional)`**: （`xparl_addr` 的配套参数）使用的分布式训练的处理器个数（仅分布式训练方式需要）
++ **`ray_addr (string, optinal, default='')`**: 分布式训练的 ray head 地址，比如：localhost:6379（仅分布式训练方式需要）
++ **`num_workers (int, optional)`**: （`ray_addr` 的配套参数）使用的分布式训练的处理器个数（仅分布式训练方式需要）
 
 
 ## 问题配置 (可选项，适用于内置问题类)

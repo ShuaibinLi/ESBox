@@ -11,6 +11,7 @@
     'init_policy': 'zeros'
 
     # train settings
+    'ray_addr': ''
     'max_runs': 1000
     'num_workers': 50
     'display': true

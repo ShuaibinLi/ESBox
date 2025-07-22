@@ -4,6 +4,7 @@ from esbox.problems.functions import Rosenbrock
 
 
 class RosenbrockFuncTest(unittest.TestCase):
+
     def setUp(self):
         self.dim = 1
         self.problem = Rosenbrock(dim=self.dim, scale=False)

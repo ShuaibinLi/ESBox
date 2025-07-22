@@ -2,9 +2,7 @@ import numpy as np
 
 EPS = 1e-8
 
-__all__ = [
-    'BoundedSampler',
-]
+__all__ = ['BoundedSampler']
 
 
 class BoundedSampler(object):

@@ -3,9 +3,15 @@ from esbox.problems.problem_base import FunctionBase
 
 
 class TestBaseFunction(FunctionBase):
+
     def __init__(self, dim=1, x_low=-5, x_up=5, scale=True, scaled_x_low=-1, scaled_x_up=1, a=5):
-        FunctionBase.__init__(
-            self, dim=dim, x_low=x_low, x_up=x_up, scale=scale, scaled_x_low=scaled_x_low, scaled_x_up=scaled_x_up)
+        FunctionBase.__init__(self,
+                              dim=dim,
+                              x_low=x_low,
+                              x_up=x_up,
+                              scale=scale,
+                              scaled_x_low=scaled_x_low,
+                              scaled_x_up=scaled_x_up)
 
         self.a = a
 
@@ -14,6 +20,7 @@ class TestBaseFunction(FunctionBase):
 
 
 class FunctionBaseTest(unittest.TestCase):
+
     def setUp(self):
         self.function_scaled = TestBaseFunction()
         self.function_no_scaled = TestBaseFunction(scale=False)

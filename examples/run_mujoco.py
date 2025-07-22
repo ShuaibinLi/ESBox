@@ -2,6 +2,7 @@ import os
 import argparse
 from loguru import logger
 import torch.nn as nn
+import ray
 
 from esbox.models import TorchModel
 from esbox.core import Config, ParallelTask
@@ -9,6 +10,7 @@ from esbox.problems.gym_problems import RLProblem
 
 
 class MyModel(TorchModel):
+
     def __init__(self, obs_dim, act_dim):
         super(MyModel, self).__init__()
 
@@ -20,10 +22,11 @@ class MyModel(TorchModel):
         return out
 
 
-@ary.remote()
+@ray.remote
 class MujocoEnv(RLProblem):
-    def __init__(self, env_name, seed=123, shift=0, n=None):
-        RLProblem.__init__(self, env_name, seed=seed, shift=shift, n=n)
+
+    def __init__(self, env_name, seed=123, reward_shift=0, n=None):
+        RLProblem.__init__(self, env_name, seed=seed, reward_shift=reward_shift, n=n)
         self.seed = seed
 
         obs_dim = self.env.observation_space.shape[0]
@@ -32,7 +35,7 @@ class MujocoEnv(RLProblem):
 
     def evaluate(self, weight):
         ret = self.run_episode(weight, add_noise=False)
-        # ret = {'value': , 'info': {"step": , "shift": , "add_noise": }}
+        # ret = {'value': , 'info': {"step": , "reward_shift": , "add_noise": }}
         return ret
 
 
@@ -42,7 +45,8 @@ def main():
     if args.work_dir:
         cfg.hyparams['work_dir'] = args.work_dir
     else:
-        cfg.hyparams['work_dir'] = './esbox_train_log/{}/{}_{}_model'.format(cfg.alg_name, cfg.hyparams['env_name'], args.seed)
+        cfg.hyparams['work_dir'] = './esbox_train_log/{}/{}_{}_model'.format(cfg.alg_name, cfg.hyparams['env_name'],
+                                                                             args.seed)
     tk = ParallelTask(config=cfg, eval_func=MujocoEnv)
     result = tk.run()
 

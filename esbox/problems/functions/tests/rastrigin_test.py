@@ -4,6 +4,7 @@ from esbox.problems.functions import Rastrigin
 
 
 class RastriginFuncTest(unittest.TestCase):
+
     def setUp(self):
         self.dim = 1
         self.problem = Rastrigin(dim=self.dim, scale=False)

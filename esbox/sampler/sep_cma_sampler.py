@@ -1,4 +1,5 @@
 import numpy as np
+
 from esbox.utils.noises import SharedNoiseTable
 from esbox.sampler.base_sampler import BoundedSampler
 

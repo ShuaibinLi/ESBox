@@ -46,7 +46,6 @@ class Config(object):
 
     def get_yaml_data(self, yaml_file):
         """Get config data from yaml file.
-
         Args:
             yaml_file: configuration file name.
         

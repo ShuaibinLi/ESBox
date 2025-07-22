@@ -46,8 +46,8 @@ MUJOCO_PROBLEM = {
 }
 
 ATARI_PROBLEM = {
-    'Pong-v0',
+    'Pong-v4',
     'PongNoFrameskip-v4',
     'BreakoutNoFrameskip-v4',
-    'ALE/Pong-v5',              # pip install ale-py, https://ale.farama.org/getting-started/#gymnasium-api
+    'ALE/Pong-v5',  # pip install ale-py, https://ale.farama.org/getting-started/#gymnasium-api
 }

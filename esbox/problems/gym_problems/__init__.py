@@ -1,1 +1,1 @@
-from esbox.problems.gym_problems.gym_problems import *
+from esbox.problems.gym_problems.gym_problems import RLProblem

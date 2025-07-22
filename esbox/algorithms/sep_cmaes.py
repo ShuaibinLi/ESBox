@@ -128,8 +128,8 @@ class SepCMAES(object):
 
         x_batch = sampled_info['batch_flatten_weights'].squeeze()
         assert len(x_batch) == self._popsize, "Values must popsize-length."
-        assert np.all(np.array(x_batch) < _MEAN_MAX
-                      ), f"Abs of all param values must be less than {_MEAN_MAX} to avoid overflow errors"
+        assert np.all(np.array(x_batch) <
+                      _MEAN_MAX), f"Abs of all param values must be less than {_MEAN_MAX} to avoid overflow errors"
 
         self._g += 1
         v_batch = v_batch.squeeze()

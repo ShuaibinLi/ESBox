@@ -5,8 +5,8 @@ import ray
 from loguru import logger
 from tensorboardX import SummaryWriter
 
-from esbox.sampler import *
-from esbox.algorithms import *
+from esbox.sampler import (BoundedSampler, GaussianSampler, CMASampler, SepCMASampler)
+from esbox.algorithms import (OpenAIES, ARS, NSRAES, CMAES, SepCMAES)
 
 __all__ = ['ParallelTask']
 
@@ -23,6 +23,7 @@ class ParallelTask(object):
         self.eval_func = eval_func
 
         # training configs
+        self.ray_addr = self.config.hyparams.get('xparl_addr', '')
         self.max_runs = self.config.hyparams.get('max_runs', 1000)
         self.eval_every_run = self.config.hyparams.get('eval_every_run', 10)
         self.display = self.config.hyparams.get('display', True)
@@ -42,7 +43,7 @@ class ParallelTask(object):
         self.l2_coeff = self.config.hyparams.get('l2_coeff', None)
         # ars
         self.top_k = self.config.hyparams.get('top_k', None)
-        self.shift = self.config.hyparams.get('shift', 0)
+        self.reward_shift = self.config.hyparams.get('reward_shift', 0)
         # nsraes
         self.n = self.config.hyparams.get('n', None)
         self.meta_population_size = self.config.hyparams.get('meta_population_size', None)
@@ -58,8 +59,8 @@ class ParallelTask(object):
         # create remote problems actors
         self._create_workers()
         # get problem dim
-        param_num_id = self.workers[0].get_dim()
-        self.config.hyparams['param_num'] = param_num_id.get()
+        param_num_id = self.workers[0].get_dim.remote()
+        self.config.hyparams['param_num'] = ray.get(param_num_id)
         self.param_num = self.config.hyparams.get('param_num', None)
 
         # init weights
@@ -80,13 +81,12 @@ class ParallelTask(object):
             self.learner = ARS(self.param_num, self.learning_rate, self.top_k, init_weights=self.init_weights)
         elif self.alg_name == 'nsraes':
             self.sampler = GaussianSampler(self.param_num, self.noise_stdev, self.seed, mirro_sampling=self.mirror)
-            self.learner = NSRAES(
-                weights_size=self.param_num,
-                step_size=self.learning_rate,
-                k=self.top_k,
-                pop_size=self.sample_num,
-                sigma=self.noise_stdev,
-                init_weights=self.init_weights)
+            self.learner = NSRAES(weights_size=self.param_num,
+                                  step_size=self.learning_rate,
+                                  k=self.top_k,
+                                  pop_size=self.sample_num,
+                                  sigma=self.noise_stdev,
+                                  init_weights=self.init_weights)
             print("Collecting init archives for narses ...")
             rewards, eval_info = self.evaluate()
             max_idx = np.argsort(rewards)[::-1][:self.meta_population_size]
@@ -95,22 +95,20 @@ class ParallelTask(object):
                 self.learner.latest_r = np.mean(rewards)
         elif self.alg_name == 'cmaes':
             self.sampler = CMASampler(weights_size=self.param_num, seed=self.seed, sigma=self.init_sigma)
-            self.learner = CMAES(
-                weights_size=self.param_num,
-                sigma=self.init_sigma,
-                population_size=self.sample_num,
-                mu=self.mu,
-                cov=None,
-                init_weights=self.init_weights)
+            self.learner = CMAES(weights_size=self.param_num,
+                                 sigma=self.init_sigma,
+                                 population_size=self.sample_num,
+                                 mu=self.mu,
+                                 cov=None,
+                                 init_weights=self.init_weights)
         elif self.alg_name == 'sep-cmaes':
             self.sampler = SepCMASampler(weights_size=self.param_num, seed=self.seed, sigma=self.init_sigma)
-            self.learner = SepCMAES(
-                weights_size=self.param_num,
-                sigma=self.init_sigma,
-                population_size=self.sample_num,
-                mu=self.mu,
-                cov=None,
-                init_weights=self.init_weights)
+            self.learner = SepCMAES(weights_size=self.param_num,
+                                    sigma=self.init_sigma,
+                                    population_size=self.sample_num,
+                                    mu=self.mu,
+                                    cov=None,
+                                    init_weights=self.init_weights)
         else:
             raise NotImplementedError("ESbox hasnot implemented {} algorithm.".format(self.alg_name))
         self.learned_info = {}
@@ -118,20 +116,26 @@ class ParallelTask(object):
     def _create_workers(self):
         # initialize workers
         logger.info('Initializing ...')
-        ray.init(address="auto")
-        ray.init(address="ray://123.45.67.89:10001")
-        if self.xparl_addr:
-            parl.connect(self.xparl_addr)
-            if self.env_name is not None:
-                self.workers = [
-                    self.eval_func(self.env_name, self.seed + 7 * i, shift=self.shift, n=self.n)
-                    for i in range(self.num_workers)
-                ]
-            else:
-                self.workers = [self.eval_func() for i in range(self.num_workers)]
-            logger.info('Creating {} remote evaluate functions.'.format(self.num_workers))
+        if self.ray_addr:
+            ray.init(address=self.ray_addr)
         else:
-            raise AttributeError("Need to specify xparl_addr attribute while using ParallelTask.")
+            ray.init(address="auto")
+        assert ray.is_initialized()
+        ray_status = {
+            "is_initialized": ray.is_initialized(),
+            "nodes": ray.nodes(),
+            "available_resources": ray.available_resources(),
+            "cluster_resources": ray.cluster_resources(),
+        }
+
+        if self.env_name is not None:
+            self.workers = [
+                self.eval_func.remote(self.env_name, self.seed + 7 * i, reward_shift=self.reward_shift, n=self.n)
+                for i in range(self.num_workers)
+            ]
+        else:
+            self.workers = [self.eval_func.remote() for _ in range(self.num_workers)]
+        logger.info('Creating {} remote evaluate functions.'.format(self.num_workers))
 
     def _init_weights(self, init_policy):
         """init policy: 
@@ -182,13 +186,15 @@ class ParallelTask(object):
 
         # parallel generation of rollouts
         rollout_ids_one = [
-            self.workers[i].evaluate_batch(batch_flatten_weights[num_rollouts * i:num_rollouts * (i + 1)])
+            self.workers[i].evaluate_batch.remote(batch_flatten_weights[num_rollouts * i:num_rollouts * (i + 1)])
             for i in range(self.num_workers)
         ]
-        rollout_ids_two = [self.workers[i].evaluate_batch(batch_flatten_weights[-i]) for i in range(extra_num, 0, -1)]
+        rollout_ids_two = [
+            self.workers[i].evaluate_batch.remote(batch_flatten_weights[-i]) for i in range(extra_num, 0, -1)
+        ]
 
         # gather results
-        results = [rollout.get() for rollout in rollout_ids_one] + [rollout.get() for rollout in rollout_ids_two]
+        results = [ray.get(rollout) for rollout in rollout_ids_one] + [ray.get(rollout) for rollout in rollout_ids_two]
 
         rollout_rewards = []
         rollout_bcs = []
@@ -212,11 +218,14 @@ class ParallelTask(object):
             eval_info (dict): additional information during the evaluation, e.g. steps, bcs(for nsraes alg)
         """
         weights = self.learner.weights
-        if hasattr(self.workers[0]._original, 'test_episode'):
-            rollout_ids = [self.workers[i].test_episode(weights) for i in range(self.num_workers)]
+        method_name = 'test_episode'
+        if hasattr(self.workers[0], method_name) and hasattr(getattr(self.workers[0], method_name), 'remote'):
+            #     if hasattr(method, "remote"):
+            # if hasattr(self.workers[0]._original, 'test_episode'):
+            rollout_ids = [self.workers[i].test_episode.remote(weights) for i in range(self.num_workers)]
         else:
-            rollout_ids = [self.workers[i].evaluate(weights) for i in range(self.num_workers)]
-        results = [rollout.get() for rollout in rollout_ids]
+            rollout_ids = [self.workers[i].evaluate.remote(weights) for i in range(self.num_workers)]
+        results = [ray.get(rollout) for rollout in rollout_ids]
 
         rewards = []
         bcs = []

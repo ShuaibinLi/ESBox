@@ -115,8 +115,8 @@ cd ESBox
 pip install . 
 ```
 ### Other Dependencies
-+ [parl](https://github.com/PaddlePaddle/PARL)
-+ pytorch or paddlepaddle
++ [ray](https://github.com/ray-project/ray)
++ pytorch
 + [gymnasium](https://github.com/Farama-Foundation/Gymnasium)
 Note: To use mujoco/atari env, use `pip install "gymnasium[all]"` to install gymnasium.
 

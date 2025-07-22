@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Run examples test in heng0
+# Run examples test
 set -e
 alias python="/data/lishuaibin/anaconda3/envs/dev_esbox/bin/python"
 
@@ -31,7 +31,7 @@ run_quadratic() {
         fi
     done
 
-    rm -rf ./train_log
+    rm -rf ./esbox_train_log
     rm -rf $filename
     if [ $done -eq 1 ]; then
         echo 1
@@ -66,7 +66,7 @@ run_cartpole() {
         fi
     done
 
-    rm -rf ./train_log
+    rm -rf ./esbox_train_log
     rm -rf $filename
     if [ $done -eq 1 ]; then
         echo 1

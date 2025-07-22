@@ -18,7 +18,12 @@ class GaussianSampler(BoundedSampler):
                                 will be clipped with lower and upper bounds.
     """
 
-    def __init__(self, weights_size, noise_stdev=0.01, seed=123, mirro_sampling=True, bounds=None,
+    def __init__(self,
+                 weights_size,
+                 noise_stdev=0.01,
+                 seed=123,
+                 mirro_sampling=True,
+                 bounds=None,
                  n_max_resampling=100):
         BoundedSampler.__init__(self, weights_size=weights_size, bounds=bounds, n_max_resampling=n_max_resampling)
 

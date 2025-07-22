@@ -105,3 +105,6 @@ venv/
 
 # mypy
 .mypy_cache/
+
+# train logs
+**/esbox_train_log/

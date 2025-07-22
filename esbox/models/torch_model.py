@@ -83,5 +83,5 @@ class TorchModel(nn.Module):
         """
         new_weights = dict()
         for key in weights.keys():
-            new_weights[key] = torch.from_numpy(weights[key])
+            new_weights[key] = torch.tensor(weights[key])
         self.load_state_dict(new_weights)

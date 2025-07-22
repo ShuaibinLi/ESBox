@@ -9,8 +9,8 @@ ESBox provides two training methods: local and distributed, and you can solve cu
 
 ## 2. Distributed training 
 It is basically the same as the **local training** above, three differences
-+ In **Step 2**, additionally decorate your problem class with `@parl.remote_class(wait=False)`.
-+ In **Step 3**, `xparl_addr` and `num_workers` are necessary in the configuration file.
++ In **Step 2**, additionally decorate your problem class with `@ray.remote`.
++ In **Step 3**, `ray_addr` and `num_workers` are necessary in the configuration file.
 + In **Step 3**, use `esbox.core.ParallelTask` to build a training task, see `run_distributed.py`.
 
 ## Examples
@@ -28,7 +28,7 @@ cd CartPole-example
     ```
 - start distributed training
     ```bash
-    xparl start --port 8010
+    ray start --head --num-cpus 50 --port 6379
     python run_distributed.py --config_file ./distributed.ymal
     ```
 **Expected Result** 
@@ -46,7 +46,7 @@ cd Quadratic-example
     ```
 - start distributed training
     ```bash
-    xparl start --port 8010
+    ray start --head --num-cpus 50 --port 6379
     python run_distributed.py --config_file ./distributed.ymal
     ```
 

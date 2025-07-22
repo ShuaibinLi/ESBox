@@ -4,6 +4,7 @@ from esbox.problems.functions import Griewank
 
 
 class GriewankFuncTest(unittest.TestCase):
+
     def setUp(self):
         self.dim = 1
         self.problem = Griewank(dim=self.dim, scale=False)

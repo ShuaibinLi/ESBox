@@ -1,10 +1,11 @@
-import gym
 import collections
 import numpy as np
 from copy import deepcopy
 from abc import abstractmethod
+import gymnasium as gym
+from gymnasium.wrappers import RecordEpisodeStatistics
 
-from esbox.utils.rl_wrappers import wrap_rms, wrap_deepmind
+from esbox.utils.gym_wrappers import wrap_mujoco, wrap_atari
 from esbox.problems.problem_lists import MUJOCO_PROBLEM, ATARI_PROBLEM
 from esbox.utils.utils import _HAS_PADDLE, _HAS_TORCH
 
@@ -12,35 +13,35 @@ __all__ = ['RLProblem']
 
 
 class RLProblem(object):
-    def __init__(self, env_name=None, seed=123, shift=0., n=None):
+
+    def __init__(self, env_name=None, seed=123, reward_shift=0., n=None):
 
         if env_name in MUJOCO_PROBLEM:
             env = gym.make(env_name)
-            self.env = wrap_rms(env)
-            self.test_env = wrap_rms(env, test=True, ob_rms=None)
-            self.env.seed(seed)
-            self.test_env.seed(seed + 110)
+            self.env = wrap_mujoco(env, norm_obs=True)
+            self.test_env = wrap_mujoco(env, norm_obs=True)
             self.continuous = True
-            self.ob_rms = None
         elif env_name in ATARI_PROBLEM:
             env = gym.make(env_name)
-            self.env = wrap_deepmind(env, dim=84, framestack=True, obs_format='NHWC')
-            self.test_env = wrap_deepmind(env, dim=84, framestack=True, obs_format='NHWC', test=test, test_episodes=1)
-            self.env.seed(seed)
-            self.test_env.seed(seed + 110)
+            self.env = wrap_atari(env, reward_func=np.sign, noop_max=30, frame_skip=4, screen_size=84, stack_size=4)
+            self.test_env = wrap_atari(env,
+                                       reward_func=np.sign,
+                                       noop_max=30,
+                                       frame_skip=4,
+                                       screen_size=84,
+                                       stack_size=4)
             self.continuous = False
         else:
             try:
                 self.env = gym.make(env_name)
                 self.test_env = gym.make(env_name)
-                self.env.seed(seed)
-                self.test_env.seed(seed + 110)
             except:
                 raise Exception("Environment {} not found in gym.".format(env_name))
 
-        self.shift = shift
+        self.reward_shift = reward_shift
         self.n = n
         self.add_noise = False
+        self.seed = seed
         np.random.seed(seed)
 
     def get_dim(self):
@@ -77,7 +78,7 @@ class RLProblem(object):
 
     def test_episode(self, weight):
         """Evaluates model weight while not training to get better evaluation of model qualities.
-        (Without adding noise to action, using original rewards (NO shift), etc.)
+        (Without adding noise to action, using original rewards (NO reward_shift), etc.)
         """
         bc = None
         if self.n is not None:
@@ -87,12 +88,9 @@ class RLProblem(object):
 
         self.model.set_flat_weights(weight)
         model = deepcopy(self.model)
-
-        total_reward = 0.
-        steps = 0
         if self.continuous:
-            self.test_env.set_ob_rms(self.ob_rms)
-        obs = self.test_env.reset()
+            self.test_env.obs_rms = self.obs_rms
+        obs, info = self.test_env.reset()
         while True:
             if _HAS_TORCH:
                 import torch
@@ -106,23 +104,21 @@ class RLProblem(object):
                 action = action.cpu().numpy().flatten()
             else:
                 raise NotImplementedError("Unable to find torch or paddle!")
-            obs, reward, done, _ = self.test_env.step(action)
+            obs, reward, terminated, truncated, info = self.test_env.step(action)
             if self.n is not None:
                 last_actions.append(action)
                 if steps < self.n:
                     start_actions.append(action)
-            steps += 1
-            total_reward += reward
-            if done:
+            if terminated or truncated:
                 break
         if self.n is not None:
             bc = np.concatenate([start_actions, last_actions]).flatten()
-        return {'value': total_reward, 'info': {"step": steps, 'bc': bc}}
+        return {'value': info['episode']['r'], 'info': {"step": info['episode']['l'], 'bc': bc}}
 
     def run_episode(self, weight, add_noise=False):
         """ 
         Performs one rollout while not done. 
-        At each time-step it substracts shift from the reward.
+        At each time-step it substracts reward_shift from the reward.
         """
         bc = None
         if self.n is not None:
@@ -134,9 +130,7 @@ class RLProblem(object):
         model = deepcopy(self.model)
 
         total_reward = 0.
-        steps = 0
-
-        obs = self.env.reset()
+        obs, info = self.env.reset()
         while True:
             if _HAS_TORCH:
                 import torch
@@ -155,17 +149,25 @@ class RLProblem(object):
                     action += np.random.randn(*action.shape) * 0.01  # self.config['action_noise_std']
                 else:
                     pass
-            obs, reward, done, _ = self.env.step(action)
+            obs, reward, terminated, truncated, info = self.env.step(action)
             if self.n is not None:
                 last_actions.append(action)
                 if steps < self.n:
                     start_actions.append(action)
-            steps += 1
-            total_reward += (reward - self.shift)
-            if done:
+            total_reward += (reward - self.reward_shift)
+            if terminated or truncated:
                 if self.continuous:
-                    self.ob_rms = self.env.get_ob_rms()
+                    self.obs_rms = self.env.obs_rms
                 break
         if self.n is not None:
             bc = np.concatenate([start_actions, last_actions]).flatten()
-        return {'value': total_reward, 'info': {"step": steps, 'bc': bc, "shift": self.shift, "add_noise": add_noise}}
+        return {
+            'value': total_reward,
+            'info': {
+                "step": info['episode']['l'],
+                "original_reward": info['episode']['r'],
+                'bc': bc,
+                "reward_shift": self.reward_shift,
+                "add_noise": add_noise
+            }
+        }

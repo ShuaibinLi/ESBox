@@ -5,12 +5,14 @@ import numpy as np
 
 import torch
 import torch.nn as nn
+
 from esbox.models import TorchModel
 from esbox.core import Config, Task
 from esbox.problems.functions import FuncProblem
 
 
 class MyModel(TorchModel):
+
     def __init__(self, obs_dim, act_dim):
         super(MyModel, self).__init__()
 
@@ -24,6 +26,7 @@ class MyModel(TorchModel):
 
 
 class MyProblem(FuncProblem):
+
     def __init__(self, func_name='ackley', dim=11, scale=False):
         FuncProblem.__init__(self, func_name=func_name, dim=dim, scale=scale)
         self.dim = dim
@@ -53,7 +56,8 @@ def main():
     if args.work_dir:
         cfg.hyparams['work_dir'] = args.work_dir
     else:
-        cfg.hyparams['work_dir'] = './esbox_train_log/{}/{}_{}_model'.format(cfg.alg_name, cfg.hyparams['func_name'], args.seed)
+        cfg.hyparams['work_dir'] = './esbox_train_log/{}/{}_{}_model'.format(cfg.alg_name, cfg.hyparams['func_name'],
+                                                                             args.seed)
     tk = Task(config=cfg, eval_func=MyProblem)
     result = tk.run()
 

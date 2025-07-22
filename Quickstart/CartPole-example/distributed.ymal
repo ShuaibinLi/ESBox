@@ -9,6 +9,6 @@
     # train settings
     'max_runs': 200
     'num_workers': 4
-    'xparl_addr': 'localhost:8010'
+    'ray_addr': ''
     'display': true
     'eval_every_run': 10
