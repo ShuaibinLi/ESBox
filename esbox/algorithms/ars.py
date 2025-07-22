@@ -1,3 +1,6 @@
+"""
+paper: https://arxiv.org/pdf/1803.07055
+"""
 import numpy as np
 from esbox.optimizers import *
 from esbox.utils.noises import SharedNoiseTable
@@ -7,7 +10,7 @@ __all__ = ['ARS']
 
 
 class ARS(object):
-    """ OpenAI-ES algorithm
+    """ ARS algorithm
     Args:
         weights_size (int): number of parameters that need to be optimized
         step_size (float): step size (learning rate) of optimizer

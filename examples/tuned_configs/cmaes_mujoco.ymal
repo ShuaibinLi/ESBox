@@ -1,6 +1,6 @@
 "cmaes":
     # env config
-    'env_name': 'HalfCheetah-v2'
+    'env_name': 'HalfCheetah-v5'
     'seed': 120
 
     # alg config
@@ -9,8 +9,8 @@
     'init_policy': 'zeros'
 
     # train settings
+    'ray_addr': ''
     'max_runs': 1000
     'num_workers': 50
-    'xparl_addr': 'localhost:8010'
     'display': true
     'eval_every_run': 10

@@ -9,6 +9,7 @@ __all__ = ['SGD', 'Adam']
 
 
 class Optimizer(object):
+
     def __init__(self, parameter_size):
         self.dim = parameter_size
         self.t = 0
@@ -16,7 +17,7 @@ class Optimizer(object):
     def update(self, theta, global_g):
         self.t += 1
         step = self._compute_step(global_g)
-        ratio = np.linalg.norm(step) / np.linalg.norm(theta)
+        ratio = np.linalg.norm(step) / (np.linalg.norm(theta) + 1e-10)
         return theta + step, ratio
 
     def _compute_step(self, global_g):
@@ -24,6 +25,7 @@ class Optimizer(object):
 
 
 class SGD(Optimizer):
+
     def __init__(self, parameter_size, stepsize, momentum=0.9):
         Optimizer.__init__(self, parameter_size)
         self.v = np.zeros(self.dim, dtype=np.float32)
@@ -36,6 +38,7 @@ class SGD(Optimizer):
 
 
 class Adam(Optimizer):
+
     def __init__(self, parameter_size, stepsize, beta1=0.9, beta2=0.999, epsilon=1e-08):
         Optimizer.__init__(self, parameter_size)
         self.stepsize = stepsize

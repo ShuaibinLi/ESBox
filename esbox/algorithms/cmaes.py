@@ -85,8 +85,8 @@ class CMAES(object):
         # learning rate for the rank-μ update, eq.58
         self._cmu = min(
             1 - self._c1 - 1e-8,  # 1e-8 is for large popsize.
-            alpha_cov * (self._mu_eff - 2 + 1 / self._mu_eff) / (
-                (self.weights_size + 2)**2 + alpha_cov * self._mu_eff / 2),
+            alpha_cov * (self._mu_eff - 2 + 1 / self._mu_eff) /
+            ((self.weights_size + 2)**2 + alpha_cov * self._mu_eff / 2),
         )
         assert self._c1 <= 1 - self._cmu, "invalid learning rate for the rank-one update"
         assert self._cmu <= 1 - self._c1, "invalid learning rate for the rank-μ update"
@@ -110,8 +110,8 @@ class CMAES(object):
         assert (self._c_sigma < 1), "invalid learning rate for cumulation for the step-size control"
 
         # learning rate for cumulation for the rank-one update eq.56
-        self._cc = (4 + self._mu_eff / self.weights_size) / (
-            self.weights_size + 4 + 2 * self._mu_eff / self.weights_size)
+        self._cc = (4 + self._mu_eff / self.weights_size) / (self.weights_size + 4 +
+                                                             2 * self._mu_eff / self.weights_size)
         assert self._cc <= 1, "invalid learning rate for cumulation for the rank-one update"
 
         # E||N(0, I)|| (p.28)
@@ -154,8 +154,8 @@ class CMAES(object):
 
         x_batch = sampled_info['batch_flatten_weights'].squeeze()
         assert len(x_batch) == self._popsize, "Values must popsize-length."
-        assert np.all(np.array(x_batch) < _MEAN_MAX
-                      ), f"Abs of all param values must be less than {_MEAN_MAX} to avoid overflow errors"
+        assert np.all(np.array(x_batch) <
+                      _MEAN_MAX), f"Abs of all param values must be less than {_MEAN_MAX} to avoid overflow errors"
 
         self._g += 1
         v_batch = v_batch.squeeze()

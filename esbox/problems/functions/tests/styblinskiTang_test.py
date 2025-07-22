@@ -4,6 +4,7 @@ from esbox.problems.functions import StyblinskiTang
 
 
 class StyblinskiTangFuncTest(unittest.TestCase):
+
     def setUp(self):
         self.dim = 1
         self.problem = StyblinskiTang(dim=self.dim, scale=False)

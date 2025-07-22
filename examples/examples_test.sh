@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Run examples test in heng0
+# Run examples test
 set -e
 alias python="/data/lishuaibin/anaconda3/envs/dev_esbox/bin/python"
 
@@ -10,7 +10,7 @@ sed_max_runs() {
     do
         sed -i "s/'max_runs': 200/'max_runs': 2/g" ${filename}
         sed -i "s/'eval_every_run': 10/'eval_every_run': 1/g" ${filename}
-        sed -i "s/'xparl_addr': 'localhost:8010'/'xparl_addr': 'localhost:8798'/g" ${filename}
+        # sed -i "s/'ray_addr': ''/'ray_addr': ''/g" ${filename}
         # sed -i "/'num_workers'/d" ${filename}
 
         # echo $filename
@@ -49,7 +49,7 @@ main() {
 
     run_func_test
 
-    xparl start --port 8798 --cpu_num 50
+    ray start --head --num-cpus 50 --port 6379
     run_mujoco_test
 
     if [$? -ne 0]; then 
@@ -57,9 +57,9 @@ main() {
     else
         echo "examples test success"
     fi
-    xparl stop
+    ray stop
     rm -rf ./tuned_configs_cp
-    rm -rf ./train_log
+    rm -rf ./esbox_train_log
 }
 
 main

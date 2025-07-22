@@ -9,8 +9,8 @@ ESBox提供两种训练方式：本地、分布式，可以根据以下指引来
 
 ## 2. 分布式训练 
 与上述**本地训练**基本一致，不同的地方有三点
-+ 在**第二步**中，需要额外使用`@parl.remote_class(wait=False)`装饰自己的问题类。
-+ 在**第三步**中，需要在配置文件中配置`xparl_addr`和`num_workers`。
++ 在**第二步**中，需要额外使用`@ray.remote`装饰自己的问题类。
++ 在**第三步**中，需要在配置文件中配置`ray_addr`和`num_workers`。
 + 在**第三步**中，使用`esbox.core.ParallelTask`构建训练任务，详见`run_distributed.py`。
 
 ## 使用样例
@@ -27,7 +27,7 @@ cd CartPole-example
     ```
 - 启动分布式训练
     ```bash
-    xparl start --port 8010
+    ray start --head --num-cpus 50 --port 6379
     python run_distributed.py --config_file ./distributed.ymal
     ```
 **预期结果** 
@@ -45,7 +45,7 @@ cd Quadratic-example
     ```
 - 启动分布式训练
     ```bash
-    xparl start --port 8010
+    ray start --head --num-cpus 50 --port 6379
     python run_distributed.py --config_file ./distributed.ymal
     ```
 **预期结果** 

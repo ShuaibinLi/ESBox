@@ -1,12 +1,12 @@
 import numpy as np
 from abc import abstractmethod
 
-from esbox.problems.functions.ackley import *
-from esbox.problems.functions.griewank import *
-from esbox.problems.functions.zakharov import *
-from esbox.problems.functions.rastrigin import *
-from esbox.problems.functions.rosenbrock import *
-from esbox.problems.functions.styblinskiTang import *
+from esbox.problems.functions.ackley import Ackley
+from esbox.problems.functions.griewank import Griewank
+from esbox.problems.functions.zakharov import Zakharov
+from esbox.problems.functions.rastrigin import Rastrigin
+from esbox.problems.functions.rosenbrock import Rosenbrock
+from esbox.problems.functions.styblinskiTang import StyblinskiTang
 
 SO_FUCNTION = {
     'ackley': Ackley,
@@ -22,6 +22,7 @@ ackley, griewank, zakharov, rastrigin, rosenbrock, styblinskitang
 
 
 class FuncProblem(object):
+
     def __init__(self, func_name="ackley", dim=2, scale=False, *args, **kwargs):
         self.problem = SO_FUCNTION[func_name](dim=dim, scale=scale, *args, **kwargs)
 

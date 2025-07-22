@@ -1,18 +1,20 @@
 import os
 import argparse
-import gym
-import paddle
-import paddle.nn as nn
-import paddle.nn.functional as F
+from loguru import logger
+import numpy as np
+import gymnasium as gym
 
-# from esbox.models import TorchModel
-from esbox.models import PaddleModel
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+from esbox.models import TorchModel
 from esbox.core import Config, Task
 from esbox.problems import ProblemBase
 
 
 # Step 1. Define your model class
-class MyModel(PaddleModel):
+class MyModel(TorchModel):
     """Please define your model by inherting `TorchModel` or `PaddleModel` class
     according to the deep learning framework that you use.
 
@@ -30,7 +32,7 @@ class MyModel(PaddleModel):
         self.initialization()
 
     def forward(self, input):
-        prob = F.softmax(self.fc(input), axis=-1)
+        prob = F.softmax(self.fc(input), dim=-1)
         return prob
 
 
@@ -44,9 +46,7 @@ class CartPoleEnv(ProblemBase):
     def __init__(self):
         super(CartPoleEnv, self).__init__()
         # definr your problem
-        from esbox.utils.rl_wrappers import CompatWrapper
-        env = gym.make('CartPole-v1')
-        self.env = CompatWrapper(env)
+        self.env = gym.make('CartPole-v1')
 
         # Please instantiate the model here if use model
         self.model = MyModel(input_dim=self.env.observation_space.shape[0], output_dim=self.env.action_space.n)
@@ -58,15 +58,15 @@ class CartPoleEnv(ProblemBase):
         # use the model to evaulate your problem
         total_reward = 0.
         steps = 0
-        obs = self.env.reset()
+        obs, info = self.env.reset()
         while True:
-            obs = paddle.to_tensor(obs, dtype='float32')
+            obs = torch.tensor(obs, dtype=torch.float32)
             probs = self.model(obs)
             action = int(probs.argmax())
-            obs, reward, done, _ = self.env.step(action)
+            obs, reward, terminated, truncated, info = self.env.step(action)
             steps += 1
             total_reward += reward
-            if done:
+            if terminated or truncated:
                 break
 
         # Please return your results in a dictionary,
@@ -80,6 +80,7 @@ def main():
     cfg = Config(config_file=args.config_file, model_cls=MyModel)
     if args.seed is not None:
         cfg.hyparams['seed'] = args.seed
+    cfg.hyparams['work_dir'] = './esbox_train_log/{}/CartPole-v1_seed{}_model'.format(cfg.alg_name, args.seed)
     tk = Task(config=cfg, eval_func=CartPoleEnv)
     result = tk.run()
 
@@ -87,6 +88,7 @@ def main():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--config_file', type=str, default='', help='config file')
+    parser.add_argument('--work_dir', type=str, default='', help='work dir path')
     parser.add_argument('--seed', type=int, default=None)
     args = parser.parse_args()
     args.config_file = os.path.join(os.path.abspath("."), args.config_file)

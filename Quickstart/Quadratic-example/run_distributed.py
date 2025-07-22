@@ -2,15 +2,15 @@ import os
 import argparse
 import numpy as np
 
-import parl
+import ray
 from esbox.core import Config, ParallelTask
 from esbox.problems import ProblemBase
 
 
 # (Undesired) Step 1. Define your model class
 # Step 2. Define your problem class
-# Please decorate your problem class with `@parl.remote_class(wait=False)` to achieve an acceleration of evaluation.
-@parl.remote_class(wait=False)
+# Please decorate your problem class with `@ray.remote` to achieve an acceleration of evaluation.
+@ray.remote
 class MyFuncEnv(ProblemBase):
     """Please define your problem by inherting `ProblemBase` class.
     
@@ -18,8 +18,7 @@ class MyFuncEnv(ProblemBase):
     """
 
     def __init__(self):
-        super(MyFuncEnv, self).__init__()
-
+        # super(MyFuncEnv, self).__init__()
         # Please define the dimension of your problem
         self.dim = 2
 
@@ -40,6 +39,7 @@ def main():
     cfg = Config(config_file=args.config_file)
     if args.seed is not None:
         cfg.hyparams['seed'] = args.seed
+    cfg.hyparams['work_dir'] = './esbox_train_log/{}/myfunc_seed{}_distributed'.format(cfg.alg_name, args.seed)
     tk = ParallelTask(config=cfg, eval_func=MyFuncEnv)
     result = tk.run()
 
@@ -47,6 +47,7 @@ def main():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--config_file', type=str, default='', help='config file')
+    parser.add_argument('--work_dir', type=str, default='', help='work dir path')
     parser.add_argument('--seed', type=int, default=None)
     args = parser.parse_args()
     args.config_file = os.path.join(os.path.abspath("."), args.config_file)

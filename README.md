@@ -34,8 +34,8 @@ English | [简体中文](./README_cn.md)
         <li><b>RL problems</b></li>
           <ul>
            <li><a href="https://mujoco.org/">Mujoco</a></li>
-                <ul><li>HalfCheetah-v2</li></ul>
-                <ul><li>Humanoid-v2</li></ul>
+                <ul><li>HalfCheetah-v5</li></ul>
+                <ul><li>Humanoid-v5</li></ul>
           </ul>
       </ul>
       </td>
@@ -83,7 +83,7 @@ English | [简体中文](./README_cn.md)
               </ul>
             <li>Distributed training</li>
               <ul> 
-              <li>RL problem: HalfCheetah-v2 (Model) </li>
+              <li>RL problem: HalfCheetah-v5 (Model) </li>
               </ul>
             </ul>
           <li><b><a href="Quickstart/">QuickStart</a></b></li>
@@ -115,11 +115,10 @@ cd ESBox
 pip install . 
 ```
 ### Other Dependencies
-+ [parl](https://github.com/PaddlePaddle/PARL)
-+ pytorch or paddlepaddle
-+ gym==0.18.0
-+ mujoco-py==2.1.2.14   
-Note: To use mujoco-v2 env in gym0.18.0, please download the [mujoco210](https://mujoco.org/download/mujoco210-linux-x86_64.tar.gz) binaries for Linux and extract the downloaded mujoco210 directory into ~/.mujoco/mujoco210.
++ [ray](https://github.com/ray-project/ray)
++ pytorch
++ [gymnasium](https://github.com/Farama-Foundation/Gymnasium)
+Note: To use mujoco/atari env, use `pip install "gymnasium[all]"` to install gymnasium.
 
 
 ### Start training

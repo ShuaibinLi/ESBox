@@ -1,12 +1,14 @@
 import unittest
 
+import numpy as np
 import paddle
 import paddle.nn as nn
-import numpy as np
+
 from esbox.models import PaddleModel
 
 
 class TestModel(PaddleModel):
+
     def __init__(self, input_dim=17, output_dim=1):
         super(TestModel, self).__init__()
         self.fc1 = nn.Linear(input_dim, 256)
@@ -21,6 +23,7 @@ class TestModel(PaddleModel):
 
 
 class ModelBaseTest(unittest.TestCase):
+
     def setUp(self):
         self.model = TestModel()
         self.target_model = TestModel()

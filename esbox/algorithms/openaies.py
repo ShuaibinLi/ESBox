@@ -1,5 +1,9 @@
+"""
+paper: https://arxiv.org/pdf/1703.03864
+blog: https://openai.com/index/evolution-strategies/
+"""
 import numpy as np
-from esbox.optimizers import *
+from esbox.optimizers import Adam
 from esbox.utils.noises import SharedNoiseTable
 from esbox.utils.rewards_utils import compute_centered_ranks
 from esbox.utils import utils

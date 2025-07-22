@@ -2,10 +2,12 @@ import unittest
 
 import torch
 import torch.nn as nn
+
 from esbox.models import TorchModel
 
 
 class TestModel(TorchModel):
+
     def __init__(self, input_dim=17, output_dim=1):
         super(TestModel, self).__init__()
         self.fc1 = nn.Linear(input_dim, 256)
@@ -20,6 +22,7 @@ class TestModel(TorchModel):
 
 
 class ModelBaseTest(unittest.TestCase):
+
     def setUp(self):
         self.model = TestModel()
         self.target_model = TestModel()

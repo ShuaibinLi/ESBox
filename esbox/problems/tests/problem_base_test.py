@@ -3,11 +3,13 @@ from esbox.problems.problem_base import ProblemBase
 
 
 class TestBaseProblem(ProblemBase):
+
     def evaluate(self, x):
         return x
 
 
 class ProblemBaseTest(unittest.TestCase):
+
     def setUp(self):
         self.problem = TestBaseProblem()
 

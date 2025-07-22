@@ -4,6 +4,7 @@ from esbox.problems.functions import Ackley
 
 
 class AckleyFuncTest(unittest.TestCase):
+
     def setUp(self):
         self.dim = 1
         self.problem = Ackley(dim=self.dim)

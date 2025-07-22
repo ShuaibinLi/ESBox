@@ -1,6 +1,7 @@
 import os
 import yaml
-from parl.utils import logger
+from loguru import logger
+
 from esbox.utils import _HAS_PADDLE, _HAS_TORCH
 
 __all__ = ['Config']
@@ -45,7 +46,6 @@ class Config(object):
 
     def get_yaml_data(self, yaml_file):
         """Get config data from yaml file.
-
         Args:
             yaml_file: configuration file name.
         

@@ -23,8 +23,8 @@ The detailed configuration of each part is described below.
 + **`max_runs (int, optinal, default=200)`**: Max time steps to run environment
 + **`display (bool, optinal, default=True)`**: whether to display the training process
 + **`eval_every_run (int, optinal, default=10)`**: step interval between two consecutive evaluations
-+ **`xparl_addr (string, optinal, default=None)`**: xparl address for distributed training, e.g. localhost:8010 (Required only for distributed training)
-+ **`num_workers (int, optional)`**: (supplementary parameter of `xparl_addr`) number of workers used to evaluation problems (Required only for distributed training)
++ **`ray_addr (string, optinal, default='')`**: ray head address for distributed training, e.g. localhost:6379 (Required only for distributed training)
++ **`num_workers (int, optional)`**: (supplementary parameter of `ray_addr`) number of workers used to evaluation problems (Required only for distributed training)
 
 
 ## Problem settings (Optional, required when using built-in problems)
@@ -36,5 +36,5 @@ The detailed configuration of each part is described below.
     + **`scale` (bool, optional, default=False)**: whether to implement linear scaling from bounds to [x_low, x_up], default [-1, 1]. Usually set when optimizing Model that use tanh as the activation function of last layer.
 
 + ### gym problems
-    + **`env_name (string)`**: name of gym environment, e.g. HalfCheetah-v2
+    + **`env_name (string)`**: name of gym environment, e.g. HalfCheetah-v5
     + **`seed (int, optinal)`**: seed for env (with the seed of the sampler, a config file only needs to appear once)
