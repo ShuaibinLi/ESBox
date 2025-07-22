@@ -45,8 +45,8 @@ def main():
     if args.work_dir:
         cfg.hyparams['work_dir'] = args.work_dir
     else:
-        cfg.hyparams['work_dir'] = './esbox_train_log/{}/{}_{}_model'.format(cfg.alg_name, cfg.hyparams['env_name'],
-                                                                             args.seed)
+        cfg.hyparams['work_dir'] = './esbox_train_log/{}/{}_seed{}_model'.format(cfg.alg_name, cfg.hyparams['env_name'],
+                                                                                 args.seed)
     tk = ParallelTask(config=cfg, eval_func=MujocoEnv)
     result = tk.run()
 

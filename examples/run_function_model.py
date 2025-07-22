@@ -56,8 +56,8 @@ def main():
     if args.work_dir:
         cfg.hyparams['work_dir'] = args.work_dir
     else:
-        cfg.hyparams['work_dir'] = './esbox_train_log/{}/{}_{}_model'.format(cfg.alg_name, cfg.hyparams['func_name'],
-                                                                             args.seed)
+        cfg.hyparams['work_dir'] = './esbox_train_log/{}/{}-dim{}_seed{}_model'.format(
+            cfg.alg_name, cfg.hyparams['func_name'], cfg.hyparams['dim'], args.seed)
     tk = Task(config=cfg, eval_func=MyProblem)
     result = tk.run()
 
