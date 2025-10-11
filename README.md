@@ -129,3 +129,13 @@ Note: To use mujoco/atari env, use `pip install "gymnasium[all]"` to install gym
 #### [Examples](examples/)
 + Examples of five algorithms that solve two categories of problems
 + The results of the benchmark reproduction
+
+### Citation
+```bibtex
+@misc{2025ESBox,
+    title={ESBox},
+    author={Shuaibin Li},
+    howpublished = {\url{https://github.com/ShuaibinLi/ESBox}},
+    year={2025}
+}
+```
